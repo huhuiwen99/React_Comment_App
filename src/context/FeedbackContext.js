@@ -16,25 +16,42 @@ export const FeedbackProvider = ({children}) => {
             rating: 7,
         },
         {
-            id: 1,
+            id: 3,
             text: 'These feedbacks are generated defaultly.',
             rating: 5,
         },
         ])
-
+    const [feedbackEdited, setFeedbackEdit] = useState({
+        item: {},
+        edit: false
+    })
+    
+    const addFeedback = (newFeedback) => {
+        newFeedback.id = uuidv4()
+        setFeedback([newFeedback, ...feedback])
+    }
     const deleteFeedback = (id) => {
         if (window.confirm('Are you sure you want to delelte?')) {
             setFeedback(feedback.filter((item) => item.id !== id))
           }
     }
-    const addFeedback = (newFeedback) => {
-        newFeedback.id = uuidv4()
-        setFeedback([newFeedback, ...feedback])
-        console.log(newFeedback)
+    const editFeedback = (item) => {
+        setFeedbackEdit({
+            item,
+            edit: true
+        })
     }
 
+    const updateFeedback = (id, updatedItem) => {
+        console.log('id', id, 'newItem', updatedItem)
+        setFeedback(
+            feedback.map((item) => (item.id === id ? {...item, ...updatedItem} : item))
+        )
+    }
+
+
     return(
-    <FeedbackContext.Provider value={{feedback, deleteFeedback, addFeedback}}>
+    <FeedbackContext.Provider value={{feedback, feedbackEdited, deleteFeedback, addFeedback, editFeedback, updateFeedback}}>
         {children}
     </FeedbackContext.Provider>
     )
